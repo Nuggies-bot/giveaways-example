@@ -1,7 +1,7 @@
 require('dotenv').config();
 const Discord = require('discord.js');
 // require Nuggies package
-const Nuggies = require('Nuggies');
+const Nuggies = require('nuggies');
 const client = new Discord.Client();
 // require discord-buttons package
 require('discord-buttons')(client);

@@ -1,5 +1,5 @@
 // require Nuggies
-const Nuggies = require('Nuggies');
+const Nuggies = require('nuggies');
 module.exports.run = async (client, message, args) => {
     if (!args[0]) return message.reply('Please provide a message ID of the giveaway to end!', { allowedMentions: { repliedUser: false } });
     try {

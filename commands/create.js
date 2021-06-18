@@ -1,5 +1,5 @@
 // require Nuggies
-const Nuggies = require('Nuggies');
+const Nuggies = require('nuggies');
 const giveaway = {};
 module.exports.run = async (client, message, args) => {
     const filter = m => m.author.id === message.author.id;

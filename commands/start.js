@@ -1,5 +1,5 @@
 // require Nuggies
-const Nuggies = require('Nuggies');
+const Nuggies = require('nuggies');
 const ms = require('ms')
 module.exports.run = async (client, message, args) => {
 	let requirements;
