@@ -1,11 +1,22 @@
 require('dotenv').config();
 const Discord = require('discord.js');
+// require Nuggies package
+const Nuggies = require('./index.js');
 const client = new Discord.Client();
+// require discord-buttons package
+require('discord-buttons')(client);
 const fs = require('fs');
+
+// Connect to the database
+Nuggies.giveaways.connect(process.env.mongoURI);
 
 client.login(process.env.BOT_TOKEN);
 
 client.on('ready', () => console.log(`${client.user.tag} is online.`));
+
+client.on('clickButton', button => {
+    Nuggies.giveaways.buttonclick(client, button);
+});
 
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
@@ -38,7 +49,7 @@ client.on('message', async message => {
             if (!command.config.userPerms) return console.log("You didn't provide userPerms.");
             if (!Array.isArray(command.config.userPerms)) return console.log('userPerms must be an array.')
             if (!message.guild.me.hasPermission(command.config.botPerms)) {
-                const beauty = command.config.botPerms.join('\`, \`'); 
+                const beauty = command.config.botPerms.join('\`, \`');
                 const noBotPerms = new Discord.MessageEmbed()
                     .setTitle('Missing Permissions')
                     .setDescription(`I am missing these permissions: \`${beauty}\`.`)
@@ -48,9 +59,9 @@ client.on('message', async message => {
             if (!message.member.hasPermission(command.config.userPerms)) {
                 const beauty = command.config.userPerms.join('\`, \`');
                 const noUserPerms = new Discord.MessageEmbed()
-                .setTitle('Missing Permissions')
-                .setDescription(`You are missing these permissions: \`${beauty}\`.`)
-                .setColor('RED');
+                    .setTitle('Missing Permissions')
+                    .setDescription(`You are missing these permissions: \`${beauty}\`.`)
+                    .setColor('RED');
                 return message.channel.send(noUserPerms)
             }
 
