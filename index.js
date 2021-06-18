@@ -1,7 +1,7 @@
 require('dotenv').config();
 const Discord = require('discord.js');
 // require Nuggies package
-const Nuggies = require('./index.js');
+const Nuggies = require('Nuggies');
 const client = new Discord.Client();
 // require discord-buttons package
 require('discord-buttons')(client);
@@ -10,10 +10,12 @@ const fs = require('fs');
 // Connect to the database
 Nuggies.giveaways.connect(process.env.mongoURI);
 
+// login to the bot
 client.login(process.env.BOT_TOKEN);
 
 client.on('ready', () => console.log(`${client.user.tag} is online.`));
 
+// handle giveaway buttons
 client.on('clickButton', button => {
     Nuggies.giveaways.buttonclick(client, button);
 });
@@ -36,7 +38,7 @@ fs.readdir('./commands/', (err, files) => {
 });
 
 client.on('message', async message => {
-    const prefix = '?'
+    const prefix = '.'
     if (message.author.bot || message.channel.type === 'dm') return;
     if (message.content.startsWith(prefix)) {
         const messageArray = message.content.split(' ');

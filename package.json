@@ -6,7 +6,8 @@
   "dependencies": {
     "discord.js": "^12.3.1",
     "dotenv": "^8.2.0",
-    "fs": "^0.0.1-security"
+    "fs": "^0.0.1-security",
+    "Nuggies": "github:Nuggies-bot/nuggies-npm"
   },
   "devDependencies": {},
   "scripts": {

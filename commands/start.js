@@ -1,5 +1,6 @@
 // require Nuggies
 const Nuggies = require('Nuggies');
+const ms = require('ms')
 module.exports.run = async (client, message, args) => {
 	let requirements;
 	let prize;
@@ -11,7 +12,6 @@ module.exports.run = async (client, message, args) => {
 	if (!args.slice(2).join(' ')) return message.reply('Please provide the prize!', { allowedMentions: { repliedUser: false } });
 	const hoster = message.author.id;
 	const winners = parseInt(args[1]);
-	const time = ms(args[0]);
 	if (args[2].endsWith('[role]')) {
 		const role = args[2].replace('[role]', '');
 		const check = message.guild.roles.cache.get(role);
@@ -29,7 +29,7 @@ module.exports.run = async (client, message, args) => {
 		prize: prize,
 		host: hoster,
 		winners: winners,
-		endAfter: time,
+		endAfter: args[0],
 		requirements: requirements,
 		channel: message.channel.id,
 	});

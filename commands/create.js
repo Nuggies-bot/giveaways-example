@@ -35,7 +35,7 @@ module.exports.run = async (client, message, args) => {
         else if (step == 4) {
             const time = msg.content;
             if (!ms(time)) return collector.stop('error');
-            giveaway.time = ms(time);
+            giveaway.time = ms(time)
             if (giveaway.time > ms('14d')) return collector.stop('HIGH_TIME');
             message.channel.send(`The time is now set to ${time}! Who is hosting the giveaway?`);
         }
@@ -85,7 +85,7 @@ module.exports.run = async (client, message, args) => {
 
                 if (r == 'done') {
                     giveaways.create({
-                        message, prize: giveaway.prize, hoster: giveaway.hoster, winners: giveaway.winners, endAt: giveaway.time + Date.now(), requirements: giveaway.requirements, channel: giveaway.channel,
+                        message: message, prize: giveaway.prize, host: giveaway.hoster, winners: giveaway.winners, endAt: time + Date.now(), requirements: giveaway.requirements, channel: giveaway.channel,
                     });
                     await message.channel.send('Created a giveaway!').then(m => setTimeout(() => m.delete(), 2000));
                 }

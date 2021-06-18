@@ -3,7 +3,9 @@ const Nuggies = require('Nuggies');
 module.exports.run = async (client, message, args) => {
     if (!args[0]) return message.reply('Please provide a message ID of the giveaway to end!', { allowedMentions: { repliedUser: false } });
     try {
-        await Nuggies.giveaways.end(client, args[0], args[1] === true, button);
+        const data = await Nuggies.giveaways.getByMessageID(args[0]);
+		const msg = await client.guilds.cache.get(data.guildID).channels.cache.get(data.channelID).messages.fetch(args[0]);
+		await Nuggies.giveaways.end(msg, data, msg);
     }
     catch (err) {
         console.log(err);
