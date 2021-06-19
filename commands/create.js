@@ -40,15 +40,15 @@ module.exports.run = async (client, message, args) => {
             message.channel.send(`The time is now set to ${time}! Who is hosting the giveaway?`);
         }
         else if (step == 5) {
-            const hoster = msg.mentions.users.first() || msg.guild.members.cache.get(msg.content) || message.member;
+            const host = msg.mentions.users.first() || msg.guild.members.cache.get(msg.content) || message.member;
 
-            giveaway.hoster = hoster.id;
-            message.channel.send(`The host is ${hoster}! Now do you want any requirements for the giveaway?`);
+            giveaway.host = host.id;
+            message.channel.send(`The host is ${host}! Now do you want any requirements for the giveaway?`);
         }
         else if (step == 6) {
             if (!['yes', 'no'].includes(msg.content.toLowerCase())) return collector.stop('error');
             giveaway.requirements = { enabled: msg.content == 'yes' ? true : false };
-            return message.channel.send(`Is this correct?\n\`\`\`Prize: ${giveaway.prize}\nWinner(s): ${giveaway.winners}\nTime: ${ms(giveaway.time)}\nHoster: ${message.guild.members.cache.get(giveaway.hoster).user.username}\nRequirements: ${giveaway.requirements.enabled ? 'Yes' : 'No'}\n\`\`\`Reply with \`yes\` or \`no\`!`);
+            return message.channel.send(`Is this correct?\n\`\`\`Prize: ${giveaway.prize}\nWinner(s): ${giveaway.winners}\nTime: ${ms(giveaway.time)}\nhost: ${message.guild.members.cache.get(giveaway.host).user.username}\nRequirements: ${giveaway.requirements.enabled ? 'Yes' : 'No'}\n\`\`\`Reply with \`yes\` or \`no\`!`);
         }
         else if (step == 7) {
             if (!['yes', 'no'].includes(msg.content)) return collector.stop('error');
@@ -85,7 +85,7 @@ module.exports.run = async (client, message, args) => {
 
                 if (r == 'done') {
                     giveaways.create({
-                        message: message, prize: giveaway.prize, host: giveaway.hoster, winners: giveaway.winners, endAt: time + Date.now(), requirements: giveaway.requirements, channel: giveaway.channel,
+                        message: message, prize: giveaway.prize, host: giveaway.host, winners: giveaway.winners, endAfter: time + Date.now(), requirements: giveaway.requirements, channel: giveaway.channel,
                     });
                     await message.channel.send('Created a giveaway!').then(m => setTimeout(() => m.delete(), 2000));
                 }
@@ -95,7 +95,7 @@ module.exports.run = async (client, message, args) => {
             Nuggies.giveaways.create({
                 message: message,
                 prize: giveaway.prize,
-                host: giveaway.hoster,
+                host: giveaway.host,
                 winners: giveaway.winners,
                 endAfter: giveaway.time,
                 requirements: giveaway.requirements,

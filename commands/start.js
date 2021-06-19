@@ -10,7 +10,7 @@ module.exports.run = async (client, message, args) => {
 	if (!args[1]) return message.reply('Please provide the time of the giveaway!', { allowedMentions: { repliedUser: false } });
 	if (!ms(args[0])) return message.reply('Please provide a valid time! Example: `1m 1w`', { allowedMentions: { repliedUser: false } });
 	if (!args.slice(2).join(' ')) return message.reply('Please provide the prize!', { allowedMentions: { repliedUser: false } });
-	const hoster = message.author.id;
+	const host = message.author.id;
 	const winners = parseInt(args[1]);
 	if (args[2].endsWith('[role]')) {
 		const role = args[2].replace('[role]', '');
@@ -27,7 +27,7 @@ module.exports.run = async (client, message, args) => {
 	Nuggies.giveaways.create({
 		message: message,
 		prize: prize,
-		host: hoster,
+		host: host,
 		winners: winners,
 		endAfter: args[0],
 		requirements: requirements,

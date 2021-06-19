@@ -13,7 +13,10 @@ Nuggies.giveaways.connect(process.env.mongoURI);
 // login to the bot
 client.login(process.env.BOT_TOKEN);
 
-client.on('ready', () => console.log(`${client.user.tag} is online.`));
+client.on('ready', () => {
+    console.log(`${client.user.tag} is online.`)
+    Nuggies.giveaways.startAgain(client);
+});
 
 // handle giveaway buttons
 client.on('clickButton', button => {
