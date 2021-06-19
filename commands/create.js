@@ -1,6 +1,7 @@
 // require Nuggies
 const Nuggies = require('nuggies');
 const giveaway = {};
+const ms = require('ms');
 module.exports.run = async (client, message, args) => {
     const filter = m => m.author.id === message.author.id;
     const collector = message.channel.createMessageCollector(filter, { max: 7, time: 60 * 1000 });
