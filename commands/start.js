@@ -5,7 +5,7 @@ module.exports.run = async (client, message, args) => {
 	let requirements;
 	let prize;
 	if (!message.member.hasPermission('MANAGE_GUILD')) return message.reply('You are not allowed to use this command!');
-	if (!args[1]) return message.reply('Please provide the options in the format of `{winners} {time} {req | optional} {prize}`');
+	if (!args[1]) return message.reply('Please provide the options in the format of `{time} {winners} {req | optional} {prize}`');
 	if (isNaN(parseInt((args[1])))) return message.reply('Please provide a valid number of winners', { allowedMentions: { repliedUser: false } });
 	if (!args[1]) return message.reply('Please provide the time of the giveaway!', { allowedMentions: { repliedUser: false } });
 	if (!ms(args[0])) return message.reply('Please provide a valid time! Example: `1m 1w`', { allowedMentions: { repliedUser: false } });
