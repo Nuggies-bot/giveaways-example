@@ -35,8 +35,8 @@ module.exports.run = async (client, message, args) => {
         else if (step == 4) {
             const time = msg.content;
             if (!ms(time)) return collector.stop('error');
-            giveaway.time = ms(time)
-            if (giveaway.time > ms('14d')) return collector.stop('HIGH_TIME');
+            giveaway.time = time
+            if (ms(giveaway.time) > ms('14d')) return collector.stop('HIGH_TIME');
             message.channel.send(`The time is now set to ${time}! Who is hosting the giveaway?`);
         }
         else if (step == 5) {
