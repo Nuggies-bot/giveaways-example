@@ -3,7 +3,7 @@ const Nuggies = require('nuggies');
 const giveaway = {};
 const ms = require('ms');
 module.exports.run = async (client, message, args) => {
-    const filter = m => m.author.id === message.author.id;
+const filter = m => m.author.id === message.author.id;
     const collector = message.channel.createMessageCollector(filter, { max: 7, time: 60 * 1000 });
     let step = 0;
 
@@ -68,7 +68,8 @@ module.exports.run = async (client, message, args) => {
             message.channel.send('You can use role requirements: `role=ID`!(without spaces) Once you are finished putting requirements say `done`');
             const rcollector = message.channel.createMessageCollector(filter, { time: 60 * 1000, max: 1000 });
             rcollector.on('collect', async (m) => {
-                if (!m.content.match(/[a-zA-Z]\s=\s[0-9]{18}/i)) if (!['done', 'stop', 'cancel'].includes(m.content.toLowerCase())) return rcollector.stop('error');
+
+                if (!['done', 'stop', 'cancel'].includes(m.content.toLowerCase()) && !m.content.includes('role=')) return rcollector.stop('error');
                 if (m.content.toLowerCase() == 'done') return rcollector.stop('done');
 
                 if (!giveaway.requirements.roles) giveaway.requirements.roles = [];
@@ -85,8 +86,10 @@ module.exports.run = async (client, message, args) => {
                 if (r == 'cancel') return message.channel.send('Cancelled giveaway setup due to wrong info!');
 
                 if (r == 'done') {
-                    giveaways.create({
-                        message: message, prize: giveaway.prize, host: giveaway.host, winners: giveaway.winners, endAfter: time + Date.now(), requirements: giveaway.requirements, channel: giveaway.channel,
+                    console.log(giveaway)
+
+                    Nuggies.giveaways.create({
+                        message: message, prize: giveaway.prize, host: giveaway.host, winners: giveaway.winners, endAfter: giveaway.time, requirements: giveaway.requirements, channel: giveaway.channel,
                     });
                     await message.channel.send('Created a giveaway!').then(m => setTimeout(() => m.delete(), 2000));
                 }
