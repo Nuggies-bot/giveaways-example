@@ -8,7 +8,7 @@ require('discord-buttons')(client);
 const fs = require('fs');
 
 // Connect to the database
-Nuggies.giveaways.connect(process.env.mongoURI);
+Nuggies.connect(process.env.mongoURI);
 
 // login to the bot
 client.login(process.env.BOT_TOKEN);
@@ -20,7 +20,7 @@ client.on('ready', () => {
 
 // handle giveaway buttons
 client.on('clickButton', button => {
-    Nuggies.giveaways.buttonclick(client, button);
+    Nuggies.buttonclick(client, button);
 });
 
 client.commands = new Discord.Collection();
