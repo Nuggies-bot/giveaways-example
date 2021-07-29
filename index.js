@@ -19,9 +19,8 @@ client.on('ready', () => {
 });
 
 // handle giveaway buttons
-client.on('clickButton', button => {
-    Nuggies.buttonclick(client, button);
-});
+Nuggies.handleInteractions(client)
+
 
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
