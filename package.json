@@ -4,8 +4,7 @@
   "description": "Giveaway example repository for @Nuggies-bot NPM",
   "main": "index.js",
   "dependencies": {
-    "discord-buttons": "^4.0.0",
-    "discord.js": "^12.3.1",
+    "discord.js": "^13.1.0",
     "dotenv": "^8.2.0",
     "fs": "^0.0.1-security",
     "nuggies": "github:Nuggies-bot/nuggies-npm#dev"

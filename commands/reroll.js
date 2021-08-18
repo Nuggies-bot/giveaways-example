@@ -1,6 +1,6 @@
 // require Nuggies
 const Nuggies = require('nuggies');
-const  { MessageButton } = require('discord-buttons');
+const  { MessageButton } = require('discord.js');
 module.exports.run = async (client, message, args) => {
     if (!args[0]) return message.reply('Please provide a message ID to the giveaway!', { allowedMentions: { repliedUser: false } });
     let win;

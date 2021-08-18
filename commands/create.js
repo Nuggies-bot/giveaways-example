@@ -4,7 +4,7 @@ const giveaway = {};
 const ms = require('ms');
 module.exports.run = async (client, message, args) => {
 const filter = m => m.author.id === message.author.id;
-    const collector = message.channel.createMessageCollector(filter, { max: 7, time: 60 * 1000 });
+    const collector = message.channel.createMessageCollector({ filter, max: 7, time: 60 * 1000 });
     let step = 0;
 
     message.channel.send('What is the prize?');
@@ -66,7 +66,7 @@ const filter = m => m.author.id === message.author.id;
 
         if (reason == 'done' && giveaway.requirements.enabled) {
             message.channel.send('You can use role requirements: `role=ID`!(without spaces) Once you are finished putting requirements say `done`');
-            const rcollector = message.channel.createMessageCollector(filter, { time: 60 * 1000, max: 1000 });
+            const rcollector = message.channel.createMessageCollector({ filter, time: 60 * 1000, max: 1000 });
             rcollector.on('collect', async (m) => {
 
                 if (!['done', 'stop', 'cancel'].includes(m.content.toLowerCase()) && !m.content.includes('role=')) return rcollector.stop('error');
