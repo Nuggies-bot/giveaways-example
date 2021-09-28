@@ -88,8 +88,8 @@ module.exports.run = async (client, interaction, args) => {
                 if (r == 'done') {
                     console.log(giveaway)
 
-                    Nuggies.giveaways.create({
-                        message: interaction, prize: giveaway.prize, host: giveaway.host, winners: giveaway.winners, endAfter: giveaway.time, requirements: giveaway.requirements, channel: giveaway.channel,
+                    Nuggies.giveaways.create(client, {
+                        prize: giveaway.prize, host: giveaway.host, winners: giveaway.winners, endAfter: giveaway.time, requirements: giveaway.requirements, channel: giveaway.channel,
                     });
                     await interaction.channel.send('Created a giveaway!').then(m => setTimeout(() => m.delete(), 2000));
                 }
