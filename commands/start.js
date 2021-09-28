@@ -4,7 +4,7 @@ const ms = require('ms')
 module.exports.run = async (client, message, args) => {
 	let requirements;
 	let prize;
-	if (!message.member.hasPermission('MANAGE_GUILD')) return message.reply('You are not allowed to use this command!');
+	if (!message.member.permissions.has('MANAGE_GUILD')) return message.reply('You are not allowed to use this command!');
 	if (!args[1]) return message.reply('Please provide the options in the format of `{time} {winners} {req | optional} {prize}`');
 	if (isNaN(parseInt((args[1])))) return message.reply('Please provide a valid number of winners', { allowedMentions: { repliedUser: false } });
 	if (!args[1]) return message.reply('Please provide the time of the giveaway!', { allowedMentions: { repliedUser: false } });
@@ -24,14 +24,13 @@ module.exports.run = async (client, message, args) => {
 		requirements = { enabled: false };
 	}
 
-	Nuggies.giveaways.create({
-		message: message,
+	Nuggies.giveaways.create(client, {
 		prize: prize,
 		host: host,
 		winners: winners,
 		endAfter: args[0],
 		requirements: requirements,
-		channel: message.channel.id,
+		channelID: message.channel.id,
 	});
 }
 

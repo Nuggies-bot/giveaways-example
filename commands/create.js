@@ -96,14 +96,13 @@ const filter = m => m.author.id === message.author.id;
             });
         }
         else {
-            Nuggies.giveaways.create({
-                message: message,
+            Nuggies.giveaways.create(client, {
                 prize: giveaway.prize,
                 host: giveaway.host,
                 winners: giveaway.winners,
                 endAfter: giveaway.time,
                 requirements: giveaway.requirements,
-                channel: giveaway.channel,
+                channelID: giveaway.channel,
             });
             await message.channel.send('Created a giveaway!').then(m => setTimeout(() => m.delete(), 2000));
         }

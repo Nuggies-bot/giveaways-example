@@ -23,7 +23,6 @@ const defaultGiveawayMessages = {
 };
 const client = new Discord.Client({ intents: 32767 });
 const fs = require('fs');
-Nuggies.giveaways.Messages(client, {})
 // Connect to the database
 Nuggies.connect(process.env.mongoURI);
 
@@ -40,7 +39,7 @@ Nuggies.handleInteractions(client)
 
 // setup custom messages
 
-Nuggies.Messages(bot, {
+Nuggies.Messages(client, {
 	giveawayOptions: defaultGiveawayMessages,
 });
 

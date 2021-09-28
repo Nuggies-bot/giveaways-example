@@ -7,7 +7,7 @@
     "discord.js": "^13.1.0",
     "dotenv": "^8.2.0",
     "fs": "^0.0.1-security",
-    "nuggies": "github:Nuggies-bot/nuggies-npm#dev"
+    "nuggies": "^3.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
