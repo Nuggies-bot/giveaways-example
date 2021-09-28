@@ -35,7 +35,7 @@ client.login(process.env.BOT_TOKEN);
 client.on('ready', () => {
     console.log(`${client.user.tag} is online.`)
     Nuggies.giveaways.startAgain(client);
-    client.application.commands.set(client.commands.map(x => x.config.data), '780334622164254720');
+    client.application.commands.set(client.commands.map(x => x.config.data));
 });
 
 // handle giveaway buttons
