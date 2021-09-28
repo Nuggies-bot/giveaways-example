@@ -103,7 +103,7 @@ module.exports.run = async (client, interaction, args) => {
                 winners: giveaway.winners,
                 endAfter: giveaway.time,
                 requirements: giveaway.requirements,
-                channel: giveaway.channel,
+                channelID: giveaway.channel,
             });
             await interaction.channel.send('Created a giveaway!').then(m => setTimeout(() => m.delete(), 2000));
         }
