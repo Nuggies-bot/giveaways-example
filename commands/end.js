@@ -1,15 +1,14 @@
 // require Nuggies
 const Nuggies = require('nuggies');
-module.exports.run = async (client, message, args) => {
-    if (!args[0]) return message.reply('Please provide a message ID of the giveaway to end!', { allowedMentions: { repliedUser: false } });
+module.exports.run = async (client, interaction, args) => {
     try {
-        const data = await Nuggies.giveaways.getByMessageID(args[0]);
-		const msg = await client.guilds.cache.get(data.guildID).channels.cache.get(data.channelID).messages.fetch(args[0]);
+        const data = await Nuggies.giveaways.getByMessageID(args.getString('id'));
+		const msg = await client.guilds.cache.get(data.guildID).channels.cache.get(data.channelID).messages.fetch(args.getString('id'));
 		await Nuggies.giveaways.end(msg, data, msg);
     }
     catch (err) {
         console.log(err);
-        return message.channel.send('Unable to find the giveaway!');
+        return interaction.reply('Unable to find the giveaway!');
     }
 }
 
@@ -19,5 +18,17 @@ module.exports.config = {
     usage: '?end <messageID>',
     botPerms: [],
     userPerms: ['MANAGE_GUILD'],
-    aliases: []
+    data: {
+        name: 'end',
+        description: 'Ends a giveaway',
+        defaultPermission: true,
+        options: [
+            {
+                name: 'id',
+                description: 'ID of the giveaway',
+                required: true,
+                type: 'STRING',
+            },
+        ],
+    },
 }

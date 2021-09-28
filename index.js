@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 const Nuggies = require('nuggies');
 const client = new Discord.Client({ intents: 32767 });
 const fs = require('fs');
-Nuggies.giveaways.Messages(client, {})
+Nuggies.Messages(client, {})
 // Connect to the database
 Nuggies.connect(process.env.mongoURI);
 
@@ -14,6 +14,7 @@ client.login(process.env.BOT_TOKEN);
 client.on('ready', () => {
     console.log(`${client.user.tag} is online.`)
     Nuggies.giveaways.startAgain(client);
+    client.application.commands.set(client.commands.map(x => x.config.data), '780334622164254720');
 });
 
 // handle giveaway buttons
@@ -33,41 +34,36 @@ fs.readdir('./commands/', (err, files) => {
     file.forEach(f => {
         const pull = require(`./commands/${f}`);
         client.commands.set(pull.config.name, pull);
-        pull.config.aliases.forEach(aliases => client.aliases.set(aliases, pull.config.name));
     });
 });
 
-client.on('message', async message => {
-    const prefix = '.'
-    if (message.author.bot || message.channel.type === 'dm') return;
-    if (message.content.startsWith(prefix)) {
-        const messageArray = message.content.split(' ');
-        const cmd = messageArray[0]
-        const args = messageArray.slice(1);
-        const command = client.commands.get(cmd.slice(prefix.length)) || client.commands.get(client.aliases.get(cmd.slice(prefix.length)));
-        if (command) {
-            if (!command.config.botPerms) return console.log("You didn't provide botPerms");
-            if (!Array.isArray(command.config.botPerms)) return console.log('botPerms must be an array.');
-            if (!command.config.userPerms) return console.log("You didn't provide userPerms.");
-            if (!Array.isArray(command.config.userPerms)) return console.log('userPerms must be an array.')
-            if (!message.guild.me.permissions.has(command.config.botPerms)) {
-                const beauty = command.config.botPerms.join('\`, \`');
-                const noBotPerms = new Discord.MessageEmbed()
-                    .setTitle('Missing Permissions')
-                    .setDescription(`I am missing these permissions: \`${beauty}\`.`)
-                    .setColor('RED');
-                return message.channel.send({ embeds: [noBotPerms] })
-            }
-            if (!message.member.permissions.has(command.config.userPerms)) {
-                const beauty = command.config.userPerms.join('\`, \`');
-                const noUserPerms = new Discord.MessageEmbed()
-                    .setTitle('Missing Permissions')
-                    .setDescription(`You are missing these permissions: \`${beauty}\`.`)
-                    .setColor('RED');
-                return message.channel.send({ embeds: [noUserPerms] })
-            }
-
-            command.run(client, message, args);
+client.on('interactionCreate', async (interaction) => {
+    if (!interaction.guild) return;
+    const cmd = interaction.commandName;
+    const args = interaction.options;
+    const command = client.commands.get(cmd);
+    if (command) {
+        if (!command.config.botPerms) return console.log("You didn't provide botPerms");
+        if (!Array.isArray(command.config.botPerms)) return console.log('botPerms must be an array.');
+        if (!command.config.userPerms) return console.log("You didn't provide userPerms.");
+        if (!Array.isArray(command.config.userPerms)) return console.log('userPerms must be an array.')
+        if (!interaction.guild.me.permissions.has(command.config.botPerms)) {
+            const beauty = command.config.botPerms.join('\`, \`');
+            const noBotPerms = new Discord.MessageEmbed()
+                .setTitle('Missing Permissions')
+                .setDescription(`I am missing these permissions: \`${beauty}\`.`)
+                .setColor('RED');
+            return interaction.reply({ embeds: [noBotPerms] })
         }
+        if (!interaction.member.permissions.has(command.config.userPerms)) {
+            const beauty = command.config.userPerms.join('\`, \`');
+            const noUserPerms = new Discord.MessageEmbed()
+                .setTitle('Missing Permissions')
+                .setDescription(`You are missing these permissions: \`${beauty}\`.`)
+                .setColor('RED');
+            return interaction.reply({ embeds: [noUserPerms] })
+        }
+
+        command.run(client, interaction, args);
     }
 });

@@ -1,18 +1,17 @@
 // require Nuggies
 const Nuggies = require('nuggies');
 const  { MessageButton } = require('discord.js');
-module.exports.run = async (client, message, args) => {
-    if (!args[0]) return message.reply('Please provide a message ID to the giveaway!', { allowedMentions: { repliedUser: false } });
+module.exports.run = async (client, interaction, args) => {
     let win;
     try {
-        win = await Nuggies.giveaways.reroll(client, args[0]);
+        win = await Nuggies.giveaways.reroll(client, args.getString('id'));
     }
     catch (err) {
         console.log(err);
-        return message.channel.send('Unable to find the giveaway!');
+        return interaction.reply('Unable to find the giveaway!');
     }
-    if (!win[0]) return message.channel.send('There are not enough people in the giveaway!');
-    message.channel.send(`Rerolled! <@${win}> is the new winner of the giveaway!`, { component: new MessageButton().setLabel('Giveaway').setURL(`https://discord.com/channels/${message.guild.id}/${message.channel.id}/${args[0]}`).setStyle('url') });
+    if (!win[0]) return interaction.reply('There are not enough people in the giveaway!');
+    interaction.reply(`Rerolled! <@${win}> is the new winner of the giveaway!`, { component: new MessageButton().setLabel('Giveaway').setURL(`https://discord.com/channels/${message.guild.id}/${message.channel.id}/${args[0]}`).setStyle('url') });
 }
 
 module.exports.config = {
@@ -21,5 +20,17 @@ module.exports.config = {
     usage: '?reroll <messageID>',
     botPerms: [],
     userPerms: ['MANAGE_GUILD'],
-    aliases: []
+    data: {
+        name: 'reroll',
+        description: 'Rerolls a giveaway',
+        defaultPermission: true,
+        options: [
+            {
+                type: 'STRING',
+                name: 'id',
+                description: 'ID of the giveaway',
+                required: true,
+            },
+        ],
+    },
 }

@@ -1,38 +1,29 @@
 // require Nuggies
 const Nuggies = require('nuggies');
 const ms = require('ms')
-module.exports.run = async (client, message, args) => {
-	let requirements;
-	let prize;
-	if (!message.member.hasPermission('MANAGE_GUILD')) return message.reply('You are not allowed to use this command!');
-	if (!args[1]) return message.reply('Please provide the options in the format of `{time} {winners} {req | optional} {prize}`');
-	if (isNaN(parseInt((args[1])))) return message.reply('Please provide a valid number of winners', { allowedMentions: { repliedUser: false } });
-	if (!args[1]) return message.reply('Please provide the time of the giveaway!', { allowedMentions: { repliedUser: false } });
-	if (!ms(args[0])) return message.reply('Please provide a valid time! Example: `1m 1w`', { allowedMentions: { repliedUser: false } });
-	if (!args.slice(2).join(' ')) return message.reply('Please provide the prize!', { allowedMentions: { repliedUser: false } });
-	const host = message.author.id;
-	const winners = parseInt(args[1]);
-	if (args[2].endsWith('[role]')) {
-		const role = args[2].replace('[role]', '');
-		const check = message.guild.roles.cache.get(role);
-		if (!check) return message.channel.send('please provide a valid role!');
-		requirements = { enabled: true, roles: [role] };
-		prize = args.slice(3).join(' ');
-	}
-	else {
-		prize = args.slice(2).join(' ');
-		requirements = { enabled: false };
+module.exports.run = async (client, interaction, args) => {
+	let requirements = {};
+	if (!interaction.member.permissions.has('MANAGE_GUILD')) return interaction.reply('You are not allowed to use this command!');
+	const prize = args.getString('prize');
+	const host = interaction.user.id;
+	const winners = parseInt(args.getNumber('winners'));
+	if (args.getRole('role')) {
+		const role = args.getRole('role');
+		requirements = { enabled: true, roles: [role.id] };
 	}
 
-	Nuggies.giveaways.create({
-		message: message,
+	Nuggies.giveaways.create(client, {
+		message: interaction,
 		prize: prize,
 		host: host,
 		winners: winners,
-		endAfter: args[0],
+		endAfter: args.getString('endafter'),
 		requirements: requirements,
-		channel: message.channel.id,
+		channelID: interaction.channel.id,
 	});
+
+	interaction.reply('Created a giveaway!');
+	setTimeout(() => { interaction.deleteReply(); }, 3000);
 }
 
 module.exports.config = {
@@ -41,5 +32,35 @@ module.exports.config = {
 	usage: '?start <winners> <time> <prize>',
 	botPerms: [],
 	userPerms: ['MANAGE_GUILD'],
-	aliases: []
+	data: {
+		name: 'start',
+		description: 'Starts a giveaway',
+		defaultPermission: true,
+		options: [
+			{
+				type: 'STRING',
+				name: 'prize',
+				description: 'Prize of giveaway',
+				required: true,
+			},
+			{
+				type: 'NUMBER',
+				name: 'winners',
+				description: 'Amount of winners in giveaway',
+				required: true,
+			},
+			{
+				type: 'STRING',
+				name: 'endafter',
+				description: 'Time for the giveaway',
+				required: true,
+			},
+			{
+				type: 'ROLE',
+				name: 'role',
+				description: 'The role requirement for giveaway',
+				required: false,
+			},
+		],
+	},
 }
