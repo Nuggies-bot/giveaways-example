@@ -84,7 +84,7 @@ module.exports.run = async (client, message, args) => {
             rcollector.on('collect', async (m) => {
                 let amari = 0,
                     wamari = 0
-                if (!['done', 'stop', 'cancel'].includes(m.content.toLowerCase())) return rcollector.stop('error');
+                if(!['done', 'stop', 'cancel'].includes(m.content.toLowerCase()) && !m.content.includes('=')) return rcollector.stop('error');
                 const id = m.content.split(' ').join('').split('=')[1];
                 if (m.content.toLowerCase() == 'done') return rcollector.stop('done');
                 if (m.content.toLowerCase.incldes('role=')) {
